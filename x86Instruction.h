@@ -283,7 +283,7 @@ enum x86Instruction
 	PSRLDQ, // Packed Shift Right Logical Double Quadword
 	PSRLW, // Packed Shift Right Logical
 	PSUBB, // Packed Subtract
-	PSUBB, // Packed Subtract Quadword
+	PSUBQ, // Packed Subtract Quadword
 	PSUBSB, // Packed Subtract with Saturation
 	PSUBUSB, // Packed Subtract Unsigned with Saturation
 	PUNPCKHBW, // Unpack High Packed Data
