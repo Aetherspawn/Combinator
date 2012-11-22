@@ -1,4 +1,4 @@
-// Todo: add partial instructions
+// Todo: do a final check to see correctness of partial instructions
 
 enum x86Instruction
 {
@@ -73,6 +73,7 @@ enum x86Instruction
 	CVTTPS2PI, // Convert Packed Single-Precision Floating-Point Values to Packed Doubleword Integers with Truncation
 	CVTTSD2SI, // Convert Scalar Double-Precision Floating-Point Value to Signed Doubleword Integer with Truncation
 	CVTTSS2SI, // Convert Scalar Single-Precision Floating-Point Value to Doubleword Integer with Truncation
+	CWD, // Convert Word to Doubleword
 
 	DAA, // Decimal Adjust AL after Addition
 	DAS, // Decimal Adjust AL after Subtraction
@@ -89,29 +90,52 @@ enum x86Instruction
 	F2XM1, // Compute 2x-1
 	FABS, // Absolute Value
 	FADD, // Add
+	FADDP, // Add
+	FIADD, // Add
 	FBLD, // Load Binary Coded Decimal
 	FBSTP, // Store BCD Integer and Pop
 	FCHS, // Change Sign
 	FCLEX, // Clear Exceptions
+	FNCLEX, // Clear Exceptions (Even When Present)
 	FCMOVCC, // Floating-Point Conditional Move
 	FCOM, // Compare Real
+	FCOMP, // Compare Real
+	FCOMPP, // Compare Real
 	FCOMI, // Compare Real and Set EFLAGS
+	FCOMIP, // Compare Real and Set EFLAGS
+	FUCOMI, // Compare Real and Set EFLAGS
+	FUCOMIP, // Compare Real and Set EFLAGS
 	FCOS, // Cosine
 	FDECSTP, // Decrement Stack-Top Pointer
 	FDIV, // Divide
+	FDIVP, // Divide
+	FIDIV, // Divide
 	FDIVR, // Reverse Divide
+	FDIVRP, // Reverse Divide
+	FIDIVR, // Reverse Divide
 	FFREE, // Free Floating-Point Register
 	FICOM, // Compare Integer
+	FICOMP, // Compare Integer
 	FISTTP, // Store Integer with Truncation
 	FILD, // Load Integer
 	FINCSTP, // Increment Stack-Top Pointer
 	FINIT, // Initialize Floating-Point Unit
+	FNINIT, // Initialize Floating-Point Unit
 	FIST, // Store Integer
+	FISTP, // Store Integer
 	FLD, // Load Real
-	FLDZ, // Load Constant
+	FLD1, // Push +1.0 onto the FPU register stack
+	FLDL2T, // Push log2(10) onto the FPU register stack
+	FLDL2E, // Push log2(e) onto the FPU register stack
+	FLDPI, // Push PI onto the FPU register stack
+	FLDLG2, // Push log10(2) onto the FPU register stack
+	FLDLN2, // Push loge(2) onto the FPU register stack
+	FLDZ, // Push +0.0 onto the FPU register stack
 	FLDCW, // Load x87 FPU Control Word
 	FLDENV, // Load x87 FPU Environment
 	FMUL, // Multiply
+	FMULP, // Multiply
+	FIMUL, // Multiply
 	FNOP, // No Operation
 	FPATAN, // Partial Arctangent
 	FPREM, // Partial Remainder
@@ -120,18 +144,29 @@ enum x86Instruction
 	FRNDINT, // Round to Integer
 	FRSTOR, // Restore x87 FPU State
 	FSAVE, // Store x87 FPU State
+	FNSAVE,
 	FSCALE, // Scale
 	FSIN, // Sine
 	FSINCOS, // Sine and Cosine
 	FSQRT, // Square Root
 	FST, // Store Real
+	FSTP,
 	FSTCW, // Store x87 FPU Control Word
+	FNSTCW,
 	FSTENV, // Store x87 FPU Environment
+	FNSTENV,
 	FSTSW, // Store x87 FPU Status Word
+	FNSTSW,
 	FSUB, // Subtract
+	FSUBP,
+	FISUB,
 	FSUBR, // Reverse Subtract
+	FSUBRP,
+	FISUBR,
 	FTST, // Test
 	FUCOM, // Unordered Compare Real
+	FUCOMP,
+	FUCOMPP,
 	FWAIT, // Wait
 	FXAM, // Examine
 	FXCH, // Exchange Register Contents
@@ -152,10 +187,15 @@ enum x86Instruction
 	IN, // Input from Port
 	INC, // Increment by 1
 	INS, // Input from Port to String
+	INSB,
+	INSW,
+	INSD,
 	INT, // Call to Interrupt Procedure
+	INTO,
 	INVD, // Invalidate Internal Caches
 	INLPG, // Invalidate TLB Entry
 	IRET, // Interrupt Return
+	IRETD,
 
 	JCC, // Conditional Jump
 	JMP, // Jump
@@ -165,6 +205,10 @@ enum x86Instruction
 	LDDQU, // Load Unaligned Integer 128 bits
 	LDMXCSR, // Load Streaming SIMD Extension Control/Status
 	LDS, // Load Far Pointer
+	LES,
+	LFS,
+	LGS,
+	LSS,
 	LEA, // Load Effective Address
 	LEAVE, // High Level Procedure Exit
 	LES, // Load Full Pointer
@@ -177,7 +221,11 @@ enum x86Instruction
 	LMSW, // Load Machine Status Word
 	LOCK, // Assert LOCK# Signal Prefix
 	LODS, // Load String
+	LODSB,
+	LODSW,
+	LODSD,
 	LOOP, // Loop According to ECX Counter
+	LOOPCC,
 	LSL, // Load Segment Limit
 	LSS, // Load Full Pointer
 	LTR, // Load Task Register
@@ -218,6 +266,8 @@ enum x86Instruction
 	MOVQ, // Move Quadword
 	MOVQ2DQ, // Move Quadword
 	MOVS, // Move Data from String to String
+	MOVSB,
+	MOVSW,
 	MOVSD, // Move Scalar Double-Precision Floating-Point Value
 	MOVSHDUP, // Move Packed Single-FP High and Duplicate
 	MOVSLDUP, // Move Packed Single-FP Low and Duplicate
@@ -242,19 +292,32 @@ enum x86Instruction
 	ORPS, // Bitwise Logical OR of Single-Precision Floating-Point Values
 	OUT, // Output to Port
 	OUTS, // Output String to Port
+	OUTSB,
+	OUTSW,
+	OUTSD,
 
 	PACKSSWB, // Pack with Signed Saturation
+	PACKSSDW,
 	PACKUSWB, // Pack with Unsigned Saturation
 	PADDB, // Packed Add
+	PADDW,
+	PADDD,
 	PADDQ, // Packed Quadword Add
 	PADDSB, // Packed Add with Saturation
+	PADDSW,
 	PADDUSB, // Packed Add Unsigned with Saturation
+	PADDUSW,
 	PAND, // Logical AND
 	PANDN, // Logical AND NOT
 	PAUSE, // Pause For Preset Amount of Time
 	PAVGB, // Packed Average
+	PAVGW,
 	PCMPEQB, // Packed Compare for Equal
+	PCMPEQW,
+	PCMPEQD,
 	PCMPGTB, // Packed Compare for Greater Than
+	PCMPGTW,
+	PCMPGTD,
 	PEXTRW, // Extract Word
 	PINSRW, // Insert Word
 	PMADDWD, // Packed Multiply and Add
@@ -268,7 +331,9 @@ enum x86Instruction
 	PMULLW, // Packed Multiply Low Signed
 	PMULUDQ, // Multiply Doubleword Unsigned
 	POP, // Pop a Value from the Stack
+	POPA,
 	POPAD, // Pop All General-Purpose Registers
+	POPF,
 	POPFD, // Pop Stack into EFLAGS Register
 	POR, // Bitwise Logical OR
 	PREFETCHH, // Prefetch Data Into Caches
@@ -279,17 +344,34 @@ enum x86Instruction
 	PSHUFW, // Packed Shuffle Words
 	PSLLDQ, // Packed Shift Left Logical Double Quadword
 	PSLLW, // Packed Shift Left Logical
+	PSLLD,
+	PSLLQ,
 	PSRAW, // Packed Shift Right Arithmetic
+	PSRAD,
 	PSRLDQ, // Packed Shift Right Logical Double Quadword
 	PSRLW, // Packed Shift Right Logical
+	PSRLD,
+	PSRLQ,
 	PSUBB, // Packed Subtract
+	PSUBW,
+	PSUBD,
 	PSUBQ, // Packed Subtract Quadword
 	PSUBSB, // Packed Subtract with Saturation
+	PSUBSW,
 	PSUBUSB, // Packed Subtract Unsigned with Saturation
+	PSUBUSW,
 	PUNPCKHBW, // Unpack High Packed Data
+	PUNPCKHWD,
+	PUNPCKHDQ,
+	PUNPCKHQDQ,
 	PUNPCKLBW, // Unpack Low Packed Data
+	PUNPCKLWD,
+	PUNPCKLDQ,
+	PUNPCKLQDQ,
 	PUSH, // Push Word or Doubleword Onto the Stack
+	PUSHA,
 	PUSHAD, // Push All General-Purpose Registers
+	PUSHF,
 	PUSHFD, // Push EFLAGS Register onto the Stack
 	PXOR, // Logical Exclusive OR
 
