@@ -1,6 +1,6 @@
-// Todo: do a final check to see correctness of partial instructions
+#pragma once
 
-enum x86Instruction
+typedef enum
 {
 	AAA, // ASCII Adjust After Addition
 	AAD, // ASCII Adjust AX Before Division
@@ -205,10 +205,6 @@ enum x86Instruction
 	LDDQU, // Load Unaligned Integer 128 bits
 	LDMXCSR, // Load Streaming SIMD Extension Control/Status
 	LDS, // Load Far Pointer
-	LES,
-	LFS,
-	LGS,
-	LSS,
 	LEA, // Load Effective Address
 	LEAVE, // High Level Procedure Exit
 	LES, // Load Full Pointer
@@ -458,4 +454,5 @@ enum x86Instruction
 	XOR, // Logical Exclusive OR
 	XORPD, // Bitwise Logical XOR for Double-Precision Floating-Point Values
 	XORPS, // Bitwise Logical XOR for Single-Precision Floating-Point Values
-};
+}
+x86Instruction;

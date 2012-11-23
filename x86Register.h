@@ -1,18 +1,19 @@
-enum x86SegmentRegister
+#pragma once
+
+typedef enum
 {
-	SegmentRegister = 1,
 	ES,
 	CS,
 	SS,
 	DS,
 	FS,
 	GS,
-};
+}
+x86SegmentRegister;
 
-enum x86DebugRegister
+typedef enum
 {
-	DebugRegister = GS + 1,
-	DR0,
+	DR0 = GS + 1,
 	DR1,
 	DR2,
 	DR3,
@@ -20,12 +21,12 @@ enum x86DebugRegister
 	DR5,
 	DR6,
 	DR7,
-};
+}
+x86DebugRegister;
 
-enum x86ControlRegister
+typedef enum
 {
-	ControlRegister = DR7 + 1,
-	CR0,
+	CR0 = DR7 + 1,
 	CR1,
 	CR2,
 	CR3,
@@ -33,12 +34,12 @@ enum x86ControlRegister
 	CR5,
 	CR6,
 	CR7,
-};
+}
+x86ControlRegister;
 		
-enum x86StandardRegister
+typedef enum
 {
-	StandardRegister = CR7 + 1,
-	EAX,
+	EAX = CR7 + 1,
 	EBX,
 	ECX,
 	EDX,
@@ -46,12 +47,12 @@ enum x86StandardRegister
 	EBP,
 	ESI,
 	EDI,
-};
+}
+x86StandardRegister;
 
-enum x86FloatRegister
+typedef enum
 {
-	FloatRegister = EDI + 1,
-	ST0,
+	ST0 = EDI + 1,
 	ST1,
 	ST2,
 	ST3,
@@ -59,4 +60,15 @@ enum x86FloatRegister
 	ST5,
 	ST6,
 	ST7,
-};
+}
+x86FloatRegister;
+
+typedef enum
+{
+	SegmentRegister = ST7 + 1,
+	DebugRegister,
+	ControlRegister,
+	StandardRegister,
+	FloatRegister,
+}
+x86RegisterType;
