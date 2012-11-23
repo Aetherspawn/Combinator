@@ -460,8 +460,14 @@ x86Opcode;
 
 typedef union
 {
-	uint32_t Immutable;
+	bool bConstant;
 	x86Register Mutable;
+}
+x86ParameterMask;
+
+typedef struct
+{
+	x86ParameterMask ParameterMask;
 }
 x86Parameter;
 
