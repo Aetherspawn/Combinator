@@ -1,6 +1,8 @@
 #pragma once
 #include <stdint.h>
+#include "x86Register.h"
 
+// MOV_PImm32_Mut32 = MOV [32-bit], 32-bit Register
 typedef enum
 {
 	AAA, // ASCII Adjust After Addition
@@ -455,13 +457,15 @@ typedef enum
 	XOR, // Logical Exclusive OR
 	XORPD, // Bitwise Logical XOR for Double-Precision Floating-Point Values
 	XORPS, // Bitwise Logical XOR for Single-Precision Floating-Point Values
+
+	x86__EOF, // The last x86Opcode tells us how many there are
 }
 x86Opcode;
 
 typedef union
 {
-	bool bConstant;
-	x86Register Mutable;
+	uint32_t bConstant;
+	x86Register RegisterMask;
 }
 x86ParameterMask;
 
@@ -469,11 +473,22 @@ typedef struct
 {
 	x86ParameterMask ParameterMask;
 }
-x86Parameter;
+x86MutableParameter;
+
+typedef struct
+{
+	uint32_t Constant;
+}
+x86ImmutableParameter;
 
 typedef struct
 {
 	x86Opcode Opcode;
-	x86Parameter aParam, bParam, cParam;
+	size_t nMutableParameters;
+	x86MutableParameter* MutableParameters;
+	size_t nImmutableParameters;
+	x86ImmutableParameter* ImmutableParameters;
 }
 x86Instruction;
+
+extern x86Instruction x86Descriptors[x86__EOF];
