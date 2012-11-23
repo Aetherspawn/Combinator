@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 
 typedef enum
 {
@@ -454,5 +455,19 @@ typedef enum
 	XOR, // Logical Exclusive OR
 	XORPD, // Bitwise Logical XOR for Double-Precision Floating-Point Values
 	XORPS, // Bitwise Logical XOR for Single-Precision Floating-Point Values
+}
+x86Opcode;
+
+typedef union
+{
+	uint32_t Immutable;
+	x86Register Mutable;
+}
+x86Parameter;
+
+typedef struct
+{
+	x86Opcode Opcode;
+	x86Parameter aParam, bParam, cParam;
 }
 x86Instruction;
